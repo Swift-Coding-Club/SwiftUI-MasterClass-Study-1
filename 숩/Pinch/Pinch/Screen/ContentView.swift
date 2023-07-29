@@ -14,6 +14,14 @@ struct ContentView: View {
     @State private var imageScale: CGFloat = 1
     
     // MARK: - FUNCTION
+    func resetImageState() {
+        return withAnimation(.spring()) {
+            // 더블탭하여 확대된 이미지를 움직이고 나서
+            // 다시 더블탭하여 축소시킬 때 원 상태로 돌리기
+            imageScale = 1
+            imageOffset = .zero
+        }
+    }
     
     // MARK: -  CONTENT
     var body: some View {
