@@ -109,6 +109,22 @@ struct ContentView: View {
                                 isDrawerOpen.toggle()
                             }
                         }
+                    
+                    // MARK: - THUMBNAILS
+                    ForEach(pages) { page in
+                        Image(page.thumbnailName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80)
+                            .cornerRadius(8)
+                            .shadow(radius: 4)
+                            .opacity(isDrawerOpen ? 1 : 0)
+                            .animation(.easeOut(duration: 0.5), value: isDrawerOpen)
+                            .onTapGesture {
+                                isAnimating = true
+                                pageIndex = page.id
+                            }
+                    }
         } //: NAVIGATION
     }
 }
