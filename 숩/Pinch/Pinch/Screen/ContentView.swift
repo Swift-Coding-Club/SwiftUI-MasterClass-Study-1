@@ -12,6 +12,11 @@ struct ContentView: View {
     
     @State private var isAnimating: Bool = false
     @State private var imageScale: CGFloat = 1
+    @State private var imageOffset: CGSize = .zero // CGSize(width: 0, height: 0)
+    @State private var isDrawerOpen: Bool = false
+    
+    let pages: [Page] = pagesData
+    @State private var pageIndex: Int = 1
     
     // MARK: - FUNCTION
     func resetImageState() {
@@ -23,19 +28,26 @@ struct ContentView: View {
         }
     }
     
+    func currentPage() -> String {
+        return pages[pageIndex - 1].imageName // 인덱스는 0부터 시작하므로 1 빼주기.
+    }
+    
     // MARK: -  CONTENT
     var body: some View {
         // NaviationView is deprecated. -> Use NavigationStack
         NavigationStack {
             ZStack {
+                Color.clear // Z스택이 화면 전체를 차지하게 만듦.
+                
                 // MARK: - PAGE IMAGE
-                Image("magazine-front-cover")
+                Image(currentPage())
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .cornerRadius(10)
                     .padding()
                     .shadow(color: .black.opacity(0.2), radius: 12, x: 2, y: 2)
                     .opacity(isAnimating ? 1 : 0)
+                    .offset(x: imageOffset.width, y: imageOffset.height)
                     .scaleEffect(imageScale)
                 // MARK: - 1. TAP GESTURE
                     .onTapGesture(count: 2, perform : {
@@ -44,9 +56,7 @@ struct ContentView: View {
                                 imageScale = 5
                             }
                         } else {
-                            withAnimation(.spring()) {
-                                imageScale = 1
-                            }
+                            resetImageState()
                         }
                     })
                 
@@ -94,9 +104,18 @@ struct ContentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear(perform: {
                 withAnimation (.linear(duration: 1)) { // do not enter the With Animation here!
+                    // 첫 실행시 이미지가 등장할 때, 애니메이션을 통하여 등장. 지속시간 정하기.
                     isAnimating = true
                 }
             })
+            // MARK: - INFO PANEL
+            .overlay(
+            infoPanelView(scale: imageScale, offset: imageOffset)
+                .padding(.horizontal)
+                .padding(.top, 30)
+            , alignment: .top
+            )
+            
             // MARK: - CONTROLS
             .overlay(
                 Group {
@@ -149,6 +168,8 @@ struct ContentView: View {
             )
             
             // MARK: - DRAWER
+            .overlay(
+                HStack(spacing: 12) {
                     // MARK: - DRAWER HANDLE
                     Image(systemName: isDrawerOpen ? "chevron.compact.right" : "chevron.compact.left")
                         .resizable()
@@ -198,5 +219,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .preferredColorScheme(.dark)
     }
 }
