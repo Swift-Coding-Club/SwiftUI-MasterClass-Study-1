@@ -125,6 +125,18 @@ struct ContentView: View {
                                 pageIndex = page.id
                             }
                     }
+                    
+                    Spacer()
+                } //: DRAWER
+                    .padding(EdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8))
+                    .background(.ultraThinMaterial)
+                    .cornerRadius(12)
+                    .opacity(isAnimating ? 1 : 0)
+                    .frame(width: 260)
+                    .padding(.top, UIScreen.main.bounds.height / 12)    // UIScreen.main.bounds.height : 화면의 실제 높이
+                    .offset(x: isDrawerOpen ? 20 : 215) // 서랍 버튼 눌렀을 때 열림 / 닫힘 위치 설정
+                , alignment: .topTrailing
+            )
         } //: NAVIGATION
     }
 }
