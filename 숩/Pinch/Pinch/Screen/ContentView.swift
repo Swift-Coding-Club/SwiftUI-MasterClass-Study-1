@@ -49,6 +49,26 @@ struct ContentView: View {
                             }
                         }
                     })
+                
+                // MARK: - 2. DRAG GESTURE
+                    .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            withAnimation(.linear(duration: 1)) {
+                                // Swift는 Drag Gesture를 수행할 때 3가지 유형의 액션 호출.
+                                // 1. Update
+                                // 2. change
+                                // 3. end
+                                imageOffset = value.translation
+                            }
+                        }
+                        .onEnded { _ in
+                            if imageScale <= 1 {
+                                resetImageState()
+                            }
+                        }
+                    )
+                
             } //: ZSTACK
             .navigationTitle("Pinch & Zoom")
             .navigationBarTitleDisplayMode(.inline)
