@@ -97,6 +97,18 @@ struct ContentView: View {
                     isAnimating = true
                 }
             })
+                    // MARK: - DRAWER HANDLE
+                    Image(systemName: isDrawerOpen ? "chevron.compact.right" : "chevron.compact.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 40)
+                        .padding(8)
+                        .foregroundStyle(.secondary)
+                        .onTapGesture {
+                            withAnimation(.easeOut) {
+                                isDrawerOpen.toggle()
+                            }
+                        }
         } //: NAVIGATION
     }
 }
